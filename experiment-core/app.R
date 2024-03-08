@@ -6,7 +6,7 @@
 #
 #    https://shiny.posit.co/
 #
-source("experiment-recipy.R")
+source("experiment-recipe.R")
 
 library(shiny)
 library(shinyjs)
