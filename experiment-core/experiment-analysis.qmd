@@ -1,0 +1,46 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+results <- read.csv("results.csv")
+```
+
+```{r}
+results |> head()
+```
+
+```{r}
+results |> 
+  mutate(minute = date_time |> ymd_hms() |> minute()) |> 
+  group_by(vote, condition, minute) |> 
+  summarise(n = n()) |> 
+  group_by(vote, condition) |> 
+    arrange(minute) |> 
+  mutate(n = cumsum(n)) |> 
+  ggplot(aes(x = minute, y = n, color = vote)) +
+  geom_point()+
+  geom_line()+
+  facet_grid(.~condition) +
+  theme_minimal()
+```
+
+```{r}
+library(DescTools)
+
+results |> 
+  count(vote, condition) |> 
+  group_by(condition) |> 
+  summarise(Gini = Gini(n)) |> 
+  ggplot(aes(x = condition, y = Gini))+
+  geom_bar(stat = "identity")+
+  theme_minimal()
+```
+
+Gini coefficient should be larger in Social Influence condition. More words about the interpretation
